@@ -1,85 +1,104 @@
 const createBtn = document.getElementById("createBtn");
 const taskList = document.getElementById("taskList");
 
-window.addEventListener("load", loadTasks);
+const totalTasks = document.getElementById("totalTasks");
+const completedTasks = document.getElementById("completedTasks");
+const pendingTasks = document.getElementById("pendingTasks");
+
+const aiSuggestion = document.getElementById("aiSuggestion");
+
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+displayTasks();
+updateStats();
 
 createBtn.addEventListener("click", () => {
 
     const title = document.getElementById("title").value;
     const description = document.getElementById("description").value;
+    const status = document.getElementById("status").value;
 
-    if(title === "" || description === ""){
+    if (title === "" || description === "") {
         alert("Please fill all fields");
         return;
     }
 
     const task = {
         title,
-        description
+        description,
+        status
     };
-
-    saveTask(task);
-
-    addTaskToScreen(task);
-
-    document.getElementById("title").value = "";
-    document.getElementById("description").value = "";
-
-});
-
-function addTaskToScreen(task){
-
-    const taskDiv = document.createElement("div");
-    taskDiv.classList.add("task");
-
-    taskDiv.innerHTML = `
-        <h3>${task.title}</h3>
-        <p>${task.description}</p>
-        <button class="delete-btn">Delete</button>
-    `;
-
-    taskList.appendChild(taskDiv);
-
-    const deleteBtn = taskDiv.querySelector(".delete-btn");
-
-    deleteBtn.addEventListener("click", () => {
-
-        taskDiv.remove();
-
-        deleteTask(task);
-
-    });
-
-}
-
-function saveTask(task){
-
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
     tasks.push(task);
 
     localStorage.setItem("tasks", JSON.stringify(tasks));
 
-}
+    displayTasks();
+    updateStats();
+    updateAI();
 
-function loadTasks(){
+    document.getElementById("title").value = "";
+    document.getElementById("description").value = "";
+});
 
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+function displayTasks() {
 
-    tasks.forEach(task => {
-        addTaskToScreen(task);
+    taskList.innerHTML = "";
+
+    tasks.forEach((task, index) => {
+
+        taskList.innerHTML += `
+        
+        <div class="task-card">
+
+            <h3>${task.title}</h3>
+
+            <p>${task.description}</p>
+
+            <span class="status">
+                ${task.status ? task.status : "Pending"}
+            </span>
+
+            <button onclick="deleteTask(${index})">
+                Delete
+            </button>
+
+        </div>
+        `;
     });
-
 }
 
-function deleteTask(taskToDelete){
+function deleteTask(index) {
 
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
-    tasks = tasks.filter(task =>
-        task.title !== taskToDelete.title
-    );
+    tasks.splice(index, 1);
 
     localStorage.setItem("tasks", JSON.stringify(tasks));
 
+    displayTasks();
+    updateStats();
+}
+
+function updateStats() {
+
+    totalTasks.innerText = tasks.length;
+
+    completedTasks.innerText =
+        tasks.filter(task => task.status === "Completed").length;
+
+    pendingTasks.innerText =
+        tasks.filter(task => task.status === "Pending").length;
+}
+
+function updateAI() {
+
+    if (tasks.length >= 5) {
+
+        aiSuggestion.innerText =
+            "You are managing many tasks. Try completing pending tasks first!";
+    }
+    else {
+
+        aiSuggestion.innerText =
+            "Great productivity! Keep going 🚀";
+    }
 }

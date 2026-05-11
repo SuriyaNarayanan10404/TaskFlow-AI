@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,22 +8,73 @@
 
     <link rel="stylesheet" href="../static/style.css">
 </head>
+
 <body>
 
     <div class="container">
 
         <h1>TaskFlow AI</h1>
-        <p>Mini SaaS Project Management Platform</p>
 
-        <div class="card">
-            <h2>Create Task</h2>
+        <p class="subtitle">
+            Mini SaaS Productivity Dashboard
+        </p>
 
-            <input type="text" id="title" placeholder="Enter Task Title">
+        <!-- Stats -->
 
-            <textarea id="description" placeholder="Enter Task Description"></textarea>
+        <div class="stats">
 
-            <button id="createBtn">Create Task</button>
+            <div class="stat-card">
+                <h2 id="totalTasks">0</h2>
+                <p>Total Tasks</p>
+            </div>
+
+            <div class="stat-card">
+                <h2 id="completedTasks">0</h2>
+                <p>Completed Tasks</p>
+            </div>
+
+            <div class="stat-card">
+                <h2 id="pendingTasks">0</h2>
+                <p>Pending Tasks</p>
+            </div>
+
         </div>
+
+        <!-- Form -->
+
+        <div class="form-card">
+
+            <h2>Create New Task</h2>
+
+            <input type="text"
+                   id="title"
+                   placeholder="Enter Task Title">
+
+            <textarea id="description"
+                      placeholder="Enter Task Description"></textarea>
+
+            <select id="status">
+                <option>Pending</option>
+                <option>Completed</option>
+            </select>
+
+            <button id="createBtn">
+                Create Task
+            </button>
+
+        </div>
+
+        <!-- AI Suggestion -->
+
+        <div class="ai-box">
+
+            <h3>AI Suggestion:</h3>
+
+            <p id="aiSuggestion"></p>
+
+        </div>
+
+        <!-- Task List -->
 
         <div id="taskList"></div>
 
@@ -31,4 +83,5 @@
     <script src="../static/script.js"></script>
 
 </body>
+
 </html>
